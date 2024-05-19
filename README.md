@@ -33,6 +33,7 @@ cd BigData_Project
 - [x] **Create README.md**
   - [x] Write project structure description.
   - [x] Write setup instructions.
+- [x] Create dev branch 
 
 ### 2. Implement Data Source Integration
 - [ ] **Connect to Wikipedia Stream**
