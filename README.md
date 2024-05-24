@@ -3,7 +3,7 @@
 ## Project Structure
 
 ```
-my_project/
+project/
 ├── config/         # Configuration files
 ├── data/           # Data models and schemas
 ├── docs/           # Documentation and design documents
