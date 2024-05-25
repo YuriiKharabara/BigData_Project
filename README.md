@@ -8,16 +8,37 @@ Utilizing Apache Spark and Apache Cassandra, the project showcases streaming and
 
 ## Project Structure
 
-```plaintext
-BigData_Project/
-├── docs/           # Documentation and architectural design documents
-└── src/            # Source code for the application and APIs
 
+## Directory and File Descriptions
 
+- **`src/`**: This directory contains all source code for the project.
+  - **`category_b/`**: Specific configurations and scripts for Category B:
+    
+    - **`src/`**: Contains all source code for category_b.
+       - **`cassandra_db.py`**: Manages database sessions and queries for Cassandra.
+       - **`constants.py`**: Stores configuration constants that are used across the application.
+       - **`extractor.py`**: Script for extracting data from streaming sources.
+       - **`handle_generic_exceptions.py`**: Provides a centralized exception handling.
+       - **`main.py`**: Entry point for the  FastAPI.
+       - **`router.py`**: Defines API routes.
+       - **`service.py`**: Implements the logic associated with each API endpoint. 
+    - **`Dockerfile.api`**: Configures the Docker container for the API service.
+    - **`Dockerfile.extractor`**: Sets up the Docker container for the data extraction service.
+    - **`docker-compose.yml`**: Manages Docker services, networks, and volumes.
+    - **`init.cql`**: Contains CQL commands to initialize the Cassandra database schema.
+    - **`load.py`**: Executes data processing using Spark, interacting with Kafka and Cassandra.
+    - **`requirements.txt`**:  Necessary Python packages.
 
-- **docs/**: Contains documentation and design documents.
-- **scripts/**: Contains scripts for data ingestion and processing.
-- **src/**: Contains the source code for the project.
+- **`data/`**: Stores schemas and data models that define the structure and integrity of the database.
+
+- **`docs/`**: Holds all documentation, including setup guides and detailed design documents.
+
+- **`scripts/`**: Includes scripts that facilitate database setup, data ingestion, and other maintenance tasks.
+
+## Setup and Operation
+
+Follow the instructions in `README.md` for detailed steps on setting up and running the project. Ensure you have Docker and other necessary tools installed as per the requirements listed in `requirements.txt`.
+
 
 
 ```
