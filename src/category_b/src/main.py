@@ -3,8 +3,7 @@ from fastapi import FastAPI
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 
-from src.category_a.router import statistics_router
-from src.category_b.router import pages_router
+from src.router import pages_router
 
 app = FastAPI(
     docs_url='/docs',
@@ -19,9 +18,7 @@ app = FastAPI(
     ]
 )
 
-app.include_router(statistics_router, tags=['stats'])
 app.include_router(pages_router, tags=['pages'])
-
 
 if __name__ == '__main__':
     uvicorn.run(app, host='0.0.0.0', port=8083)
