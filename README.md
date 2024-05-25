@@ -1,21 +1,26 @@
 
-# BigData_Project
+# Big Data Project: Wikipedia
+
+## Overview
+
+The Big Data Project's  aim is the real-time analysis of Wikipedia's page creation events. 
+Utilizing Apache Spark and Apache Cassandra, the project showcases streaming and batch data processing to provide statistics and on-demand data access through RESTful APIs.
 
 ## Project Structure
 
-```
-project/
-├── data/           # Data models and schemas
-├── docs/           # Documentation and design documents
-├── scripts/        # Scripts for data ingestion and processing
-└── src/            # Source code directory
-```
+```plaintext
+BigData_Project/
+├── docs/           # Documentation and architectural design documents
+└── src/            # Source code for the application and APIs
 
 
-- **data/**: Contains data.
+
 - **docs/**: Contains documentation and design documents.
 - **scripts/**: Contains scripts for data ingestion and processing.
 - **src/**: Contains the source code for the project.
+
+
+```
 
 ## Setup Instruction
 
