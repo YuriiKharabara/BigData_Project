@@ -101,3 +101,27 @@ b) Category B:
 
 ```
 
+## Results
+## Results
+
+### Category A
+
+The Category A system was run for 4 hours. The results for the various API calls can be found in the `category_a` directory.
+
+- **Hourly Aggregated Statistics:** Results for different time ranges (`n` = 0, 1, 3, and 6 hours).
+- **Bot-created Pages Statistics:** Results for different time ranges (`n` = 0, 1, and 3 hours).
+- **Top Users by Page Creation:** Results for different time ranges (`n` = 0, 1, 3, and 6 hours).
+
+More detailed info can be found in [`results/category_a/README.md`](results/category_a/README.md).
+
+### Category B
+
+The Category B system handles ad-hoc queries for various statistics. The results for these queries can be found in the `category_b` directory.
+
+- **Get Articles by Domain:** Number of articles for different domains.
+- **Get Domains:** List of all existing domains.
+- **Get Page by ID:** Detailed information for pages identified by their IDs.
+- **Get Pages by User ID:** List of pages created by specific users.
+- **Get Users:** Summary of user activity within specified time ranges.
+
+More detailed info can be found in [results/category_b/README.md](results/category_b/README.md).
