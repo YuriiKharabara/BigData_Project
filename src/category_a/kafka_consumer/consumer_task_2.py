@@ -27,7 +27,7 @@ def main():
         bootstrap_servers=KAFKA_BROKER,
         auto_offset_reset='earliest',
         enable_auto_commit=True,
-        group_id='group-consumer2',
+        group_id='group-consumer2', # Unique group ID. This is used for each consumer receiving all the messages from the same topic.
         value_deserializer=lambda m: json.loads(m.decode('utf-8'))
     )
     current_hour = datetime.utcnow().replace(minute=0, second=0, microsecond=0)

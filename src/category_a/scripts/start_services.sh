@@ -7,16 +7,15 @@ cleanup() {
     exit 1
 }
 
-# Trap SIGINT and call cleanup function
+# Trap SIGINT and call cleanup function (handle Ctrl+C)
 trap cleanup SIGINT
 
-# Delay and setup commands
 sleep 50
 docker cp scripts/init.cql cassandra:/init.cql
 sleep 10
 docker exec -it cassandra cqlsh -f /init.cql
 
-# Start producer and consumers in the background
+# Start producer and consumers In the background
 python producer.py &
 producer_pid=$!
 
@@ -29,5 +28,4 @@ consumer2_pid=$!
 python kafka_consumer/consumer_task_3.py &
 consumer3_pid=$!
 
-# Wait for all processes to finish
 wait $producer_pid $consumer1_pid $consumer2_pid $consumer3_pid

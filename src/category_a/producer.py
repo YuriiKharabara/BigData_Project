@@ -10,7 +10,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.kafka_config import KAFKA_TOPIC, KAFKA_BROKER
 
-# Wikipedia stream URL
 WIKI_STREAM_URL = "https://stream.wikimedia.org/v2/stream/page-create"
 
 def send_to_kafka(producer, topic, message):
@@ -34,16 +33,14 @@ def main():
                         try:
                             message = json.loads(line[5:])
                             send_to_kafka(producer, KAFKA_TOPIC, message)
-                            # print(f"Sent: {message}")
                         except json.JSONDecodeError:
-                            # print(f"Failed to decode: {line}")
                             continue
         except ChunkedEncodingError as e:
             print(f"Stream connection lost: {e}. Reconnecting...")
-            time.sleep(5)  # Wait for a short period before retrying
+            time.sleep(5)  # wait for a short period before retrying
         except requests.RequestException as e:
             print(f"Request failed: {e}. Retrying...")
-            time.sleep(1)  # Wait for a short period before retrying
+            time.sleep(1)  # wait for a short period before retrying
 
 if __name__ == "__main__":
     main()

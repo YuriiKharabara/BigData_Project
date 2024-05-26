@@ -28,7 +28,7 @@ def main():
         bootstrap_servers=KAFKA_BROKER,
         auto_offset_reset='earliest',
         enable_auto_commit=True,
-        group_id='group-consumer3',  # Unique group ID
+        group_id='group-consumer3',  # Unique group ID. This is used for each consumer receiving all the messages from the same topic.
         value_deserializer=lambda m: json.loads(m.decode('utf-8'))
     )
 
