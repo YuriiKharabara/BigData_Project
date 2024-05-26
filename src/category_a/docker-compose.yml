@@ -1,32 +1,52 @@
 version: '3.8'
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - .:/app
     ports:
       - "8000:8000"
+    networks:
+      - spark-net-a
+
   zookeeper:
-    image: bitnami/zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
-    environment:
-      ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - spark-net-a
+      
   kafka:
-    image: bitnami/kafka
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
     ports:
       - "9092:9092"
-    expose:
-      - "9093"
     environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "PurchaseRequests:1:1,PurchaseResponses:1:1, ReservationRequests:1:1,  ReservationResponses:1:1"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - zookeeper
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - spark-net-a
+
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: 'wiki-cluster'
+      CASSANDRA_NUM_TOKENS: 256
+      CASSANDRA_DC: 'dc1'
+      CASSANDRA_RACK: 'rack1'
+    networks:
+      - spark-net-a
+networks:
+  spark-net-a:

@@ -1,27 +1,26 @@
-import json
-from datetime import datetime, timedelta
-
-from cassandra.cluster import Cluster
 from kafka import KafkaConsumer
+import json
+from cassandra.cluster import Cluster
+from datetime import datetime, timedelta
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from src.kafka_config import KAFKA_TOPIC, KAFKA_BROKER
+from src.cassandra_config import CASSANDRA_KEYSPACE, CASSANDRA_HOSTS
 
-from ..constants import *
-
-
-def save_to_cassandra(user_stats):
-    cluster = Cluster([CASSANDRA_HOSTS])
+def save_to_cassandra(user_stats, hour_start, hour_end):
+    cluster = Cluster(CASSANDRA_HOSTS)
     session = cluster.connect(CASSANDRA_KEYSPACE)
 
     for user_id, stats in user_stats.items():
         for stat in stats:
             session.execute(
-                f"INSERT INTO user_stats (user_id, user_name, page_title, creation_time) VALUES (%s, %s, %s, %s)",
+                "INSERT INTO user_stats (user_id, user_name, page_title, creation_time) VALUES (%s, %s, %s, %s)",
                 (str(user_id), stat['user_name'], stat['page_title'], stat['creation_time'])
-                # Convert user_id to string
             )
 
     session.shutdown()
     cluster.shutdown()
-
 
 def main():
     consumer = KafkaConsumer(
@@ -29,12 +28,12 @@ def main():
         bootstrap_servers=KAFKA_BROKER,
         auto_offset_reset='earliest',
         enable_auto_commit=True,
-        group_id='group-consumer3',
+        group_id='group-consumer3',  # Unique group ID
         value_deserializer=lambda m: json.loads(m.decode('utf-8'))
     )
-    current_hour = datetime.utcnow().replace(second=0, microsecond=0)
 
-    next_hour = current_hour + timedelta(minutes=5)
+    current_hour = datetime.utcnow().replace(minute=0, second=0, microsecond=0)
+    next_hour = current_hour + timedelta(hours=1)
     user_stats = {}
 
     for message in consumer:
@@ -53,14 +52,13 @@ def main():
             'creation_time': creation_time
         })
 
-        now = datetime.utcnow().replace(second=0, microsecond=0)
+        now = datetime.utcnow().replace(minute=0, second=0, microsecond=0)
         if now >= next_hour:
-            print(f"Saving data for {current_hour} to {next_hour} to Cassandra")
-            save_to_cassandra(user_stats)
+            print(f"Consumer3: Saving data for {current_hour} to {next_hour} to Cassandra")
+            save_to_cassandra(user_stats, current_hour, next_hour)
             current_hour = next_hour
-            next_hour = current_hour + timedelta(minutes=5)
+            next_hour = current_hour + timedelta(hours=1)
             user_stats = {}
-
 
 if __name__ == "__main__":
     main()

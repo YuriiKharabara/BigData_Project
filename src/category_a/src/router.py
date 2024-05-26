@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query
 
-from src.category_a import service
+from src import service
 from src.handle_generic_exceptions import handle_and_raise_generic_exception
 
 statistics_router = APIRouter(prefix='/statistics')
@@ -17,7 +17,7 @@ def get_statistics(
     :param n: (int) - The number of hours.
     :return: (str) - Statistics for the given period.
     """
-    statistics = service.get_last_n_hours()
+    statistics = service.get_last_n_hours(n)
     return statistics
 
 
