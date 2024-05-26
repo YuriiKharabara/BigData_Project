@@ -6,7 +6,15 @@
 The Big Data Project's  aim is the real-time analysis of Wikipedia's page creation events. 
 Utilizing Apache Spark and Apache Cassandra, the project showcases streaming and batch data processing to provide statistics and on-demand data access through RESTful APIs.
 
+
+
+## Architecture for Category-B
+![image](https://github.com/YuriiKharabara/BigData_Project/assets/92577132/c11aadd5-aa7a-4e0f-a39c-0d7236c52954)
+
+
+
 ## Project Structure
+
 
 
 ## Directory and File Descriptions
