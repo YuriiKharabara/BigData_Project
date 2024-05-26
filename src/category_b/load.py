@@ -2,6 +2,8 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json, to_timestamp, window, count, coalesce, lit
 from pyspark.sql.types import StructType, StringType
 
+KEYSPACE = "pageinfo"
+
 spark = SparkSession.builder \
     .appName("Spark Load to Multiple Cassandra Tables") \
     .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1") \
@@ -57,7 +59,7 @@ def write_to_cassandra(batch_df, batch_id):
     ).write \
         .format("org.apache.spark.sql.cassandra") \
         .mode("append") \
-        .options(table="pages_by_domain", keyspace="pageinfo") \
+        .options(table="pages_by_domain", keyspace=KEYSPACE) \
         .save()
 
     batch_df.select(
@@ -65,7 +67,7 @@ def write_to_cassandra(batch_df, batch_id):
     ).write \
         .format("org.apache.spark.sql.cassandra") \
         .mode("append") \
-        .options(table="pages_by_user", keyspace="pageinfo") \
+        .options(table="pages_by_user", keyspace=KEYSPACE) \
         .save()
 
     batch_df.select(
@@ -74,7 +76,7 @@ def write_to_cassandra(batch_df, batch_id):
     ).write \
         .format("org.apache.spark.sql.cassandra") \
         .mode("append") \
-        .options(table="page_details", keyspace="pageinfo") \
+        .options(table="page_details", keyspace=KEYSPACE) \
         .save()
 
     page_counts_df = batch_df \
@@ -92,7 +94,7 @@ def write_to_cassandra(batch_df, batch_id):
 
     cassandra_df = spark.read \
         .format("org.apache.spark.sql.cassandra") \
-        .options(table="user_activity", keyspace="pageinfo") \
+        .options(table="user_activity", keyspace=KEYSPACE) \
         .load()
 
     updated_df = page_counts_df.alias("new") \
@@ -109,7 +111,7 @@ def write_to_cassandra(batch_df, batch_id):
     ).write \
         .format("org.apache.spark.sql.cassandra") \
         .mode("append") \
-        .options(table="user_activity", keyspace="pageinfo") \
+        .options(table="user_activity", keyspace=KEYSPACE) \
         .save()
 
 
