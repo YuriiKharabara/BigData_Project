@@ -1,94 +1,132 @@
-# BigData_Project
+
+# Big Data Project: Wikipedia
+
+## Overview
+
+The Big Data Project's  aim is the real-time analysis of Wikipedia's page creation events. 
+Utilizing Apache Spark and Apache Cassandra, the project showcases streaming and batch data processing to provide statistics and on-demand data access through RESTful APIs.
+
+## Authors
+
+- [Yurii Kharabara](https://github.com/YuriiKharabara)
+- [Anastasiia Petrovych](https://github.com/nastiapetrovych)
+
+## Architecture for Category-A
+![image](https://github.com/YuriiKharabara/BigData_Project/assets/92577132/d61e8ee1-9fb1-4706-bc45-844a538e815a)
+
+More detailed info can be found in [`docs/category_a_system_overview.md`](docs/category_a_system_overview.md).
+
+
+## Architecture for Category-B
+![image](https://github.com/YuriiKharabara/BigData_Project/assets/92577132/79feafa7-473f-4f2a-8422-97136b0fc553)
+
+More detailed info can be found in [`docs/category_b_data_models.txt`](docs/category_b_data_models.txt).
+
 
 ## Project Structure
 
-```
-my_project/
-├── config/         # Configuration files
-├── data/           # Data models and schemas
-├── docs/           # Documentation and design documents
-├── scripts/        # Scripts for data ingestion and processing
-└── src/            # Source code directory
-```
 
-- **config/**: Contains configuration files for the project.
-- **data/**: Contains data.
-- **docs/**: Contains documentation and design documents.
-- **scripts/**: Contains scripts for data ingestion and processing.
-- **src/**: Contains the source code for the project.
+
+## Directory and File Descriptions
+
+- **`src/`**: This directory contains all source code for the project.
+  - **`category_a/`**: Specific configurations and scripts for Category A:
+    
+    - **`src/`**: Contains all source code for category_a.
+       - **`cassandra_config.py`**: Manages database configuration for Cassandra.
+       - **`handle_generic_exceptions.py`**: Provides centralized exception handling.
+       - **`kafka_config.py`**: Manages Kafka configuration.
+       - **`main.py`**: Entry point for the FastAPI application.
+       - **`router.py`**: Defines API routes.
+       - **`service.py`**: Implements the logic associated with each API endpoint.
+    - **`docker-compose.yml`**: Manages Docker services, networks, and volumes for Category A.
+    - **`Dockerfile.api`**: Configures the Docker container for the API service in Category A.
+    - **`kafka_consumer/`**: Contains Kafka consumer scripts for different tasks.
+       - **`consumer_task_1.py`**: Consumer script for task 1.
+       - **`consumer_task_2.py`**: Consumer script for task 2.
+       - **`consumer_task_3.py`**: Consumer script for task 3.
+    - **`producer.py`**: Kafka producer script.
+    - **`requirements.txt`**: Necessary Python packages for Category A.
+    - **`response.py`**: Handles API responses.
+    - **`scripts/`**: Contains scripts for service management.
+       - **`init.cql`**: Contains CQL commands to initialize the Cassandra database schema for Category A.
+       - **`start_services.sh`**: Script to start services.
+       - **`stop_services.sh`**: Script to stop services.
+         
+  - **`category_b/`**: Specific configurations and scripts for Category B:
+    
+    - **`src/`**: Contains all source code for category_b.
+       - **`cassandra_db.py`**: Manages database sessions and queries for Cassandra.
+       - **`constants.py`**: Stores configuration constants that are used across the application.
+       - **`extractor.py`**: Script for extracting data from streaming sources.
+       - **`handle_generic_exceptions.py`**: Provides a centralized exception handling.
+       - **`main.py`**: Entry point for the  FastAPI.
+       - **`router.py`**: Defines API routes.
+       - **`service.py`**: Implements the logic associated with each API endpoint. 
+    - **`Dockerfile.api`**: Configures the Docker container for the API service.
+    - **`Dockerfile.extractor`**: Sets up the Docker container for the data extraction service.
+    - **`docker-compose.yml`**: Manages Docker services, networks, and volumes.
+    - **`init.cql`**: Contains CQL commands to initialize the Cassandra database schema.
+    - **`load.py`**: Executes data processing using Spark, interacting with Kafka and Cassandra.
+    - **`requirements.txt`**:  Necessary Python packages.
+
+- **`data/`**: Stores schemas and data models that define the structure and integrity of the database.
+
+- **`docs/`**: Holds all documentation, including setup guides and detailed design documents.
+
+- **`scripts/`**: Includes scripts that facilitate database setup, data ingestion, and other maintenance tasks.
+
+## Setup and Operation
+
+Follow the instructions in `README.md` for detailed steps on setting up and running the project. Ensure you have Docker and other necessary tools installed as per the requirements listed in `requirements.txt`.
+
+
+
+```bash
 
 ## Setup Instruction
 
-```bash
-git clone https://github.com/YuriiKharabara/BigData_Project.git
-cd BigData_Project
+
+Initial steps:
+      git clone https://github.com/YuriiKharabara/BigData_Project.git
+      cd BigData_Project
+a) Category A:
+      1. cd  src/category_a
+      2. docker-compose up -d # Start api and executor containers
+      2. pip install -r requirements.txt
+      3. bash ./scripts/start_services.sh # Start producer and consumers. As a result you can find fullfilled table (Within the next full hour.)
+      4. Service is available on 'http://localhost:8000/docs' # Access the endpoins
+b) Category B:
+      1. cd  src/category_b
+      2. docker-compose up -d # Start api and executor containers
+      2. docker cp init.cql cassandra:/init.cql
+         docker exec -it cassandra cqlsh -f /init.cql # Create cassandra tables
+      3. docker-compose exec spark-master spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1,com.datastax.spark:spark-cassandra-connector_2.12:3.0.0 load.py # Start data processing and write to cassandra tables
+      4. Service is available on 'http://localhost:8000/docs' # Access the endpoins
+
 ```
 
+## Results
+## Results
 
-## TODO List
+### Category A
 
-### 1. Setup Project Environment
-- [x] **Initialize Git Repository**
-- [x] **Create Project Structure**
-- [x] **Create README.md**
-  - [x] Write project structure description.
-  - [x] Write setup instructions.
-- [x] Create dev branch 
+The Category A system was run for 4 hours. The results for the various API calls can be found in the `category_a` directory.
 
-### 2. Implement Data Source Integration
-- [ ] **Connect to Wikipedia Stream**
-  - [ ] Write a script to connect to the Wikipedia page creation stream.
-  - [ ] Parse JSON data from the stream.
-- [ ] **Store Data in Database** (Think about schemas and DB)
+- **Hourly Aggregated Statistics:** Results for different time ranges (`n` = 0, 1, 3, and 6 hours).
+- **Bot-created Pages Statistics:** Results for different time ranges (`n` = 0, 1, and 3 hours).
+- **Top Users by Page Creation:** Results for different time ranges (`n` = 0, 1, 3, and 6 hours).
 
-### 3. Setup Databases with Docker
-- [ ] **Install and Configure with Docker**
-  - [ ] Write a Dockerfile.
-  - [ ] Write a `docker-compose.yml` to manage the services.
-- [ ] **Define Data Models**
-  - [ ] Create tables.
+More detailed info can be found in [`results/category_a/README.md`](results/category_a/README.md).
 
-### 4. Implement Batch Processing with Spark
-- [ ] **Write Spark Jobs**
-  - [ ] Compute statistics for the number of pages created per domain per hour.
-  - [ ] Compute statistics for pages created by bots per domain.
-  - [ ] Identify top 20 users by page creation.
-- [ ] **Schedule Batch Jobs**
-  - [ ] Set up Apache Airflow or ?.
-  - [ ] Schedule batch jobs to run every hour.
+### Category B
 
-### 5. Implement Streaming Processing with Spark Streaming
-- [ ] **Set Up Spark Streaming**
-  - [ ] Configure Spark Streaming to process real-time data.
-  - [ ] Implement real-time data processing logic.
-  - [ ] Continuously update DB with streaming data.
+The Category B system handles ad-hoc queries for various statistics. The results for these queries can be found in the `category_b` directory.
 
-### 6. Develop REST APIs
-- [ ] **Set Up API Framework**
-  - [ ] set up Flask or FastAPI.
-- [ ] **Implement Category A APIs**
-  - [ ] Implement `/api/reports/created-pages` endpoint.
-  - [ ] Implement `/api/reports/pages-created-by-bots` endpoint.
-  - [ ] Implement `/api/reports/top-users` endpoint.
-- [ ] **Implement Category B APIs**
-  - [ ] Implement `/api/domains` endpoint.
-  - [ ] Implement `/api/user-pages/{user_id}` endpoint.
-  - [ ] Implement `/api/domain-articles/{domain}` endpoint.
-  - [ ] Implement `/api/page/{page_id}` endpoint.
-  - [ ] Implement `/api/users` endpoint.
-- [ ] **Test APIs**
-  - [ ] Write and run tests for each endpoint to ensure correct functionality.
+- **Get Articles by Domain:** Number of articles for different domains.
+- **Get Domains:** List of all existing domains.
+- **Get Page by ID:** Detailed information for pages identified by their IDs.
+- **Get Pages by User ID:** List of pages created by specific users.
+- **Get Users:** Summary of user activity within specified time ranges.
 
-### 7. Documentation and Finalization
-- [ ] **Write Detailed Design Document**
-  - [ ] Describe architecture overview.
-  - [ ] Explain design decisions.
-  - [ ] Detail each system component.
-- [ ] **Create Data Model Diagrams**
-  - [ ] Draw and include diagrams for data models in the documentation.
-- [ ] **Run System for Testing**
-  - [ ] Run the system for at least 4 hours.
-  - [ ] Collect example results for API calls.
-- [ ] **Ensure Code Quality**
-  - [ ] Document all source code.
-  - [ ] Clean and organize the codebase.
+<!-- More detailed info can be found in [`results/category_b/README.md`](results/category_b/README.md). -->
