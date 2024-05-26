@@ -74,11 +74,11 @@ Follow the instructions in `README.md` for detailed steps on setting up and runn
 
 
 
-```
+```bash
 
 ## Setup Instruction
 
-```bash
+
 Initial steps:
       git clone https://github.com/YuriiKharabara/BigData_Project.git
       cd BigData_Project
