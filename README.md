@@ -22,6 +22,29 @@ Utilizing Apache Spark and Apache Cassandra, the project showcases streaming and
 ## Directory and File Descriptions
 
 - **`src/`**: This directory contains all source code for the project.
+  - **`category_a/`**: Specific configurations and scripts for Category A:
+    
+    - **`src/`**: Contains all source code for category_a.
+       - **`cassandra_config.py`**: Manages database configuration for Cassandra.
+       - **`handle_generic_exceptions.py`**: Provides centralized exception handling.
+       - **`kafka_config.py`**: Manages Kafka configuration.
+       - **`main.py`**: Entry point for the FastAPI application.
+       - **`router.py`**: Defines API routes.
+       - **`service.py`**: Implements the logic associated with each API endpoint.
+    - **`docker-compose.yml`**: Manages Docker services, networks, and volumes for Category A.
+    - **`Dockerfile.api`**: Configures the Docker container for the API service in Category A.
+    - **`kafka_consumer/`**: Contains Kafka consumer scripts for different tasks.
+       - **`consumer_task_1.py`**: Consumer script for task 1.
+       - **`consumer_task_2.py`**: Consumer script for task 2.
+       - **`consumer_task_3.py`**: Consumer script for task 3.
+    - **`producer.py`**: Kafka producer script.
+    - **`requirements.txt`**: Necessary Python packages for Category A.
+    - **`response.py`**: Handles API responses.
+    - **`scripts/`**: Contains scripts for service management.
+       - **`init.cql`**: Contains CQL commands to initialize the Cassandra database schema for Category A.
+       - **`start_services.sh`**: Script to start services.
+       - **`stop_services.sh`**: Script to stop services.
+         
   - **`category_b/`**: Specific configurations and scripts for Category B:
     
     - **`src/`**: Contains all source code for category_b.
@@ -59,9 +82,14 @@ Follow the instructions in `README.md` for detailed steps on setting up and runn
 Initial steps:
       git clone https://github.com/YuriiKharabara/BigData_Project.git
       cd BigData_Project
-
+a) Category A:
+      1. cd  src/category_a
+      2. docker-compose up -d # Start api and executor containers
+      2. pip install -r requirements.txt
+      3. bash ./scripts/start_services.sh # Start producer and consumers. As a result you can find fullfilled table (Within the next full hour.)
+      4. Service is available on 'http://localhost:8000/docs' # Access the endpoins
 b) Category B:
-      1. cd  category_b
+      1. cd  src/category_b
       2. docker-compose up -d # Start api and executor containers
       2. docker cp init.cql cassandra:/init.cql
          docker exec -it cassandra cqlsh -f /init.cql # Create cassandra tables
