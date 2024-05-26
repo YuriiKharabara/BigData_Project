@@ -124,4 +124,4 @@ The Category B system handles ad-hoc queries for various statistics. The results
 - **Get Pages by User ID:** List of pages created by specific users.
 - **Get Users:** Summary of user activity within specified time ranges.
 
-More detailed info can be found in [results/category_b/README.md](results/category_b/README.md).
+More detailed info can be found in [`results/category_b/README.md`](results/category_b/README.md).
