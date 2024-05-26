@@ -9,10 +9,13 @@ Utilizing Apache Spark and Apache Cassandra, the project showcases streaming and
 ## Architecture for Category-A
 ![image](https://github.com/YuriiKharabara/BigData_Project/assets/92577132/d61e8ee1-9fb1-4706-bc45-844a538e815a)
 
+More detailed info can be found in [`docs/category_a_system_overview.md`](docs/category_a_system_overview.md).
+
 
 ## Architecture for Category-B
 ![image](https://github.com/YuriiKharabara/BigData_Project/assets/92577132/79feafa7-473f-4f2a-8422-97136b0fc553)
 
+More detailed info can be found in [`docs/category_b_data_models.txt`](docs/category_b_data_models.txt).
 
 
 ## Project Structure
