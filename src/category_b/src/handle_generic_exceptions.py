@@ -9,6 +9,5 @@ def handle_and_raise_generic_exception(func):
             return func(*args, **kwargs)
 
         except Exception as e:
-            if isinstance(e, HTTPException):
-                raise
+            raise HTTPException(status_code=500, detail='The server is unavailable.')
     return sync_wrapper
