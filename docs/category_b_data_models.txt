@@ -1,8 +1,9 @@
 System Overview:
-Choose Cassandra DB for its features that are well-suited to both streaming and batch processing applications in real
-life. Here are the key advantages that impacted my decision:
+Choose Cassandra DB for its features, which are well-suited to both streaming and batch-processing applications in real life. 
 
-1. Flexible Data Storage: Ideal for environments that must handle both streaming inputs and batch data, enabling me to update and adjust the data schema as the application evolves.
+Here are the key advantages that impacted this choice:
+
+1. Flexible Data Storage: Ideal for environments that must handle both streaming inputs and batch data, allowing the adjustment of the data schema.
 2. High Availability and Write Performance: Essential for achieving throughput in scenarios with heavy real-time write loads.
 3. Scalability: Ensures that the system can efficiently manage increasing volumes of data without any single point of failure.
 
